@@ -152,35 +152,105 @@ while True:
                     continue
         #####################################################################################
         if piece == "Rook":
-            #PLACEHOLDER CODE! NOT COMPLETE!
-            row_number = int
-
             row_0 = [0, 1, 2, 3, 4, 5, 6, 7]
-            row_1 = []
-            row_2 = []
-            row_3 = []
-            row_4 = []
-            row_5 = []
-            row_6 = []
-            row_7 = []
-            
-            column_number = int
+            row_1 = [8, 9, 10, 11, 12, 13, 14, 15]
+            row_2 = [16, 17, 18, 19, 20, 21, 22, 23]
+            row_3 = [24, 25, 26, 27, 28, 29, 30, 31]
+            row_4 = [32, 33, 34, 35, 36, 37, 38, 39]
+            row_5 = [40, 41, 42, 43, 44, 45, 46, 47]
+            row_6 = [48, 49, 50, 51, 52, 53, 54, 55]
+            row_7 = [56, 57, 58, 59, 60, 61, 62, 63]
 
             column_0 = [0, 8, 16, 24, 32, 40, 48, 56]
-            column_1 = []
-            column_2 = []
-            column_3 = []
-            column_4 = []
-            column_5 = []
-            column_6 = []
-            column_7 = []
+            column_1 = [1, 9, 17, 25, 33, 41, 49, 57]
+            column_2 = [2, 10, 18, 26, 34, 42, 50, 58]
+            column_3 = [3, 11, 19, 27, 35, 43, 51, 59]
+            column_4 = [4, 12, 20, 28, 36, 44, 52, 60]
+            column_5 = [5, 13, 21, 29, 37, 45, 53, 61]
+            column_6 = [6, 14, 22, 30, 38, 46, 54, 62]
+            column_7 = [7, 15, 23, 31, 39, 47, 55, 63]
 
-            row_number = from_square_number / 8 
+            row_number = from_square_number // 8 
             column_number = from_square_number % 8
 
-            legal_moves = row_0 + column_0
+            row = [row_0, row_1, row_2, row_3, row_4, row_5, row_6, row_7][row_number]
+            column = [column_0, column_1, column_2, column_3, column_4, column_5, column_6, column_7][column_number]
 
-        
+            legal_moves = set(row) | set(column)
+        #####################################################################################
+        if piece == "Bishop":
+            legal_moves = []
+            row_from = from_square_number // 8
+            col_from = from_square_number % 8
+
+            # moving diagonally top-left
+            row = row_from - 1
+            col = col_from - 1
+            while row >= 0 and col >= 0:
+                to_square_number = row * 8 + col
+                to_square = chess_board[to_square_number]
+                if to_square["color"] == None:
+                    legal_moves.append(to_square_number)
+                elif to_square["color"] != color:
+                    legal_moves.append(to_square_number)
+                    break
+                else:
+                    break
+                row -= 1
+                col -= 1
+
+            # moving diagonally top-right
+            row = row_from - 1
+            col = col_from + 1
+            while row >= 0 and col < 8:
+                to_square_number = row * 8 + col
+                to_square = chess_board[to_square_number]
+                if to_square["color"] == None:
+                    legal_moves.append(to_square_number)
+                elif to_square["color"] != color:
+                    legal_moves.append(to_square_number)
+                    break
+                else:
+                    break
+                row -= 1
+                col += 1
+
+            # moving diagonally bottom-left
+            row = row_from + 1
+            col = col_from - 1
+            while row < 8 and col >= 0:
+                to_square_number = row * 8 + col
+                to_square = chess_board[to_square_number]
+                if to_square["color"] == None:
+                    legal_moves.append(to_square_number)
+                elif to_square["color"] != color:
+                    legal_moves.append(to_square_number)
+                    break
+                else:
+                    break
+                row += 1
+                col -= 1
+
+            # moving diagonally bottom-right
+            row = row_from + 1
+            col = col_from + 1
+            while row < 8 and col < 8:
+                to_square_number = row * 8 + col
+                to_square = chess_board[to_square_number]
+                if to_square["color"] == None:
+                    legal_moves.append(to_square_number)
+                elif to_square["color"] != color:
+                    legal_moves.append(to_square_number)
+                    break
+                else:
+                    break
+                row += 1
+                col += 1
+
+            if len(legal_moves) == 0:
+                continue
+          
+          
         #Can't move to squares with a same color piece
         if color == "White":
             legal_moves = [move for move in legal_moves if chess_board[move]["color"] != "White"]
@@ -189,6 +259,8 @@ while True:
             legal_moves = [move for move in legal_moves if chess_board[move]["color"] != "Black"]
         
         #Choose where you want to move
+        if len(legal_moves) == 0:
+            continue
         print("Legal moves:", legal_moves)
         to_square_number = int(input("Choose where you want to move: "))
             

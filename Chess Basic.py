@@ -54,13 +54,21 @@ turn = "White"
 while True:
     
     #Choose the square with the piece you want to move
-    from_square_number = int(input("Choose a square(0-63): "))
+    from_square_notation = (input("Choose a piece(use notation): "))
 
+    def square_notation_to_num(notation):
+        files = "abcdefgh"
+        file = files.index(notation[0])
+        rank = int(notation[1]) - 1
+        return 8 * rank + file
+    
+    from_square_number = square_notation_to_num(from_square_notation)
+    
     from_square = chess_board[from_square_number]
     piece = from_square["piece"]
     color = from_square["color"]
 
-    print("Square", from_square_number, "has a", color, piece)
+    print("Square", from_square_notation, "has a", color, piece)
     
     if color == turn:    
 
@@ -282,7 +290,35 @@ while True:
         #####################################################################################
         if piece == "King":
             legal_moves = [from_square_number - 9, from_square_number - 8, from_square_number - 7, from_square_number - 1, from_square_number + 1, from_square_number + 7, from_square_number + 8, from_square_number + 9]
-        #REMEMBER TO FIX KING!
+
+            if from_square_number % 8 < 1:
+                if from_square_number - 9 in legal_moves:
+                    legal_moves.remove(from_square_number - 9)
+                if from_square_number - 1 in legal_moves:
+                    legal_moves.remove(from_square_number  - 1)
+                if from_square_number + 7 in legal_moves:
+                    legal_moves.remove(from_square_number + 7)
+            if from_square_number % 8 > 6:
+                if from_square_number - 7 in legal_moves:
+                    legal_moves.remove(from_square_number - 7)
+                if from_square_number + 1 in legal_moves:
+                    legal_moves.remove(from_square_number + 1) 
+                if from_square_number + 9 in legal_moves:
+                    legal_moves.remove(from_square_number + 9)
+            if from_square_number / 8 < 1:
+                if from_square_number - 7 in legal_moves:
+                    legal_moves.remove(from_square_number - 7)
+                if from_square_number - 8 in legal_moves:
+                    legal_moves.remove(from_square_number - 8)
+                if from_square_number - 9 in legal_moves:
+                    legal_moves.remove(from_square_number - 9)
+            if from_square_number / 8 > 6:   
+                if from_square_number + 7 in legal_moves:
+                    legal_moves.remove(from_square_number + 7)
+                if from_square_number + 8 in legal_moves:
+                    legal_moves.remove(from_square_number + 8)
+                if from_square_number + 9 in legal_moves:
+                    legal_moves.remove(from_square_number + 9)
         #####################################################################################
         
         #Can't move to squares with a same color piece
@@ -293,10 +329,31 @@ while True:
             legal_moves = [move for move in legal_moves if chess_board[move]["color"] != "Black"]
         
         #Choose where you want to move
+
         if len(legal_moves) == 0:
             continue
-        print("Legal moves:", legal_moves)
-        to_square_number = int(input("Choose where you want to move: "))
+        
+        files = 'abcdefgh'
+        ranks = '12345678'
+
+        def num_to_square_notation(square):
+            file = files[square % 8]
+            rank = ranks[square // 8]
+            return f"{file}{rank}"
+
+        def square_notation_to_num(notation):
+            files = "abcdefgh"
+            file = files.index(notation[0])
+            rank = int(notation[1]) - 1
+            return 8 * rank + file
+
+        legal_move_notations = [num_to_square_notation(move) for move in legal_moves]
+
+        print("Legal moves:", *legal_move_notations)
+
+        to_square_notation = (input("Choose where you want to move: "))
+
+        to_square_number = square_notation_to_num(to_square_notation)
             
         to_square = chess_board[to_square_number]
 

@@ -100,9 +100,6 @@ while True:
                     legal_moves.remove(from_square_number - 7)
                 if chess_board[from_square_number - 9]["color"] != "White":   
                     legal_moves.remove(from_square_number - 9) 
-
-                if len(legal_moves) == 0:
-                    continue
         #####################################################################################
         if piece == "Knight":
             legal_moves = [from_square_number - 17, from_square_number - 15, from_square_number - 10, from_square_number - 6, from_square_number + 6, from_square_number + 10, from_square_number + 15, from_square_number + 17]   
@@ -189,15 +186,15 @@ while True:
             down_left2 = [from_square_number - 9, from_square_number - 18, from_square_number - 27, from_square_number - 36, from_square_number - 45, from_square_number - 54, from_square_number - 63]
             down_right2 = [from_square_number - 7, from_square_number - 14, from_square_number - 21, from_square_number - 28, from_square_number - 35, from_square_number - 42, from_square_number - 49]
 
-            up_right = up_right[:-column_number]
-            down_right = down_right[:-column_number]
-            up_left = up_left[:-(7-column_number)]
-            down_left = down_left[:-(7-column_number)]
+            up_right = up_right[:-column_number or None] # FUCK PYTHON
+            down_right = down_right[:-column_number or None]
+            up_left = up_left[:-(7-column_number) or None]
+            down_left = down_left[:-(7-column_number) or None]
 
-            up_left2 = up_left2[:-row_number]
-            up_right2 = up_right2[:-row_number]
-            down_left2 = down_left2[:-(7-row_number)]
-            down_right2 = down_right2[:-(7-row_number)]
+            up_left2 = up_left2[:-row_number or None]
+            up_right2 = up_right2[:-row_number or None]
+            down_left2 = down_left2[:-(7-row_number) or None]
+            down_right2 = down_right2[:-(7-row_number) or None]
 
             if len(up_right) > len(up_right2):
                 final_up_right = up_right2 
@@ -217,6 +214,77 @@ while True:
                 final_down_left = down_left
 
             legal_moves = set(final_up_left) | set(final_up_right) | set(final_down_left) | set(final_down_right)
+        #####################################################################################   
+        #Queen needs to be cleaned up
+        if piece == "Queen":
+            row_number = from_square_number // 8 
+            column_number = from_square_number % 8
+
+            up_left = [from_square_number + 7, from_square_number + 14, from_square_number + 21, from_square_number + 28, from_square_number + 35, from_square_number + 42, from_square_number + 49] 
+            up_right = [from_square_number + 9, from_square_number + 18, from_square_number + 27, from_square_number + 36, from_square_number + 45, from_square_number + 54, from_square_number + 63]
+            down_left = [from_square_number - 9, from_square_number - 18, from_square_number - 27, from_square_number - 36, from_square_number - 45, from_square_number - 54, from_square_number - 63]
+            down_right = [from_square_number - 7, from_square_number - 14, from_square_number - 21, from_square_number - 28, from_square_number - 35, from_square_number - 42, from_square_number - 49]
+
+            up_left2 = [from_square_number + 7, from_square_number + 14, from_square_number + 21, from_square_number + 28, from_square_number + 35, from_square_number + 42, from_square_number + 49] 
+            up_right2 = [from_square_number + 9, from_square_number + 18, from_square_number + 27, from_square_number + 36, from_square_number + 45, from_square_number + 54, from_square_number + 63]
+            down_left2 = [from_square_number - 9, from_square_number - 18, from_square_number - 27, from_square_number - 36, from_square_number - 45, from_square_number - 54, from_square_number - 63]
+            down_right2 = [from_square_number - 7, from_square_number - 14, from_square_number - 21, from_square_number - 28, from_square_number - 35, from_square_number - 42, from_square_number - 49]
+
+            up_right = up_right[:-column_number or None]
+            down_right = down_right[:-column_number or None]
+            up_left = up_left[:-(7-column_number) or None]
+            down_left = down_left[:-(7-column_number) or None]
+
+            up_left2 = up_left2[:-row_number or None]
+            up_right2 = up_right2[:-row_number or None]
+            down_left2 = down_left2[:-(7-row_number) or None]
+            down_right2 = down_right2[:-(7-row_number) or None]
+
+            if len(up_right) > len(up_right2):
+                final_up_right = up_right2 
+            else:
+                final_up_right = up_right 
+            if len(up_left) > len(up_left2):
+                final_up_left = up_left2 
+            else:
+                final_up_left = up_left
+            if len(down_right) > len(down_right2):
+                final_down_right = down_right2 
+            else:
+                final_down_right = down_right 
+            if len(down_left) > len(down_left2):
+                final_down_left = down_left2 
+            else:
+                final_down_left = down_left
+            
+            row_0 = [0, 1, 2, 3, 4, 5, 6, 7]
+            row_1 = [8, 9, 10, 11, 12, 13, 14, 15]
+            row_2 = [16, 17, 18, 19, 20, 21, 22, 23]
+            row_3 = [24, 25, 26, 27, 28, 29, 30, 31]
+            row_4 = [32, 33, 34, 35, 36, 37, 38, 39]
+            row_5 = [40, 41, 42, 43, 44, 45, 46, 47]
+            row_6 = [48, 49, 50, 51, 52, 53, 54, 55]
+            row_7 = [56, 57, 58, 59, 60, 61, 62, 63]
+
+            column_0 = [0, 8, 16, 24, 32, 40, 48, 56]
+            column_1 = [1, 9, 17, 25, 33, 41, 49, 57]
+            column_2 = [2, 10, 18, 26, 34, 42, 50, 58]
+            column_3 = [3, 11, 19, 27, 35, 43, 51, 59]
+            column_4 = [4, 12, 20, 28, 36, 44, 52, 60]
+            column_5 = [5, 13, 21, 29, 37, 45, 53, 61]
+            column_6 = [6, 14, 22, 30, 38, 46, 54, 62]
+            column_7 = [7, 15, 23, 31, 39, 47, 55, 63]
+
+            row = [row_0, row_1, row_2, row_3, row_4, row_5, row_6, row_7][row_number]
+            column = [column_0, column_1, column_2, column_3, column_4, column_5, column_6, column_7][column_number]
+
+            legal_moves = set(final_up_left) | set(final_up_right) | set(final_down_left) | set(final_down_right) | set(row) | set(column)
+        #####################################################################################
+        if piece == "King":
+            legal_moves = [from_square_number - 9, from_square_number - 8, from_square_number - 7, from_square_number - 1, from_square_number + 1, from_square_number + 7, from_square_number + 8, from_square_number + 9]
+        #REMEMBER TO FIX KING!
+        #####################################################################################
+        
         #Can't move to squares with a same color piece
         if color == "White":
             legal_moves = [move for move in legal_moves if chess_board[move]["color"] != "White"]
